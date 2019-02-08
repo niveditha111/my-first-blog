@@ -1,9 +1,19 @@
 from django.shortcuts import render
 from django.utils import timezone
-from .models import Post
+from .models import Category,Post
 from django.shortcuts import render, get_object_or_404
 from .forms import PostForm
 from django.shortcuts import redirect
+
+def category_list(request):
+    categories = Category.objects.all() # this will get all categories, you can do some filtering if you need (e.g. excluding categories without posts in it)
+
+    return render (request, 'blog/category_list.html', {'categories': categories}) # blog/category_list.html should be the template that categories are listed.
+
+def category_detail(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+
+    return render(request, 'blog/category_detail.html', {'category': category}) # in this template, you will have access to category and posts under that category by (category.post_set).
 
 
 def post_list(request):
