@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from .models import Category,Post
 from django.shortcuts import render, get_object_or_404
-from .forms import PostForm
+from .forms import PostForm,CategoryForm
 from django.shortcuts import redirect
 
 def category_list(request):
@@ -12,8 +12,8 @@ def category_list(request):
 
 def category_detail(request, pk):
     category = get_object_or_404(Category, pk=pk)
-
-    return render(request, 'blog/category_detail.html', {'category': category}) # in this template, you will have access to category and posts under that category by (category.post_set).
+    posts = Post.objects.filter(category=category).order_by('published_date')
+    return render(request, 'blog/category_detail.html', {'category': category,'posts':posts}) # in this template, you will have access to category and posts under that category by (category.post_set).
 
 
 def post_list(request):
